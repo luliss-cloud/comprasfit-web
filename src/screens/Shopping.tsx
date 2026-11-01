@@ -12,7 +12,6 @@ export function Shopping() {
   const { columns } = useResponsive();
   const [message, setMessage] = useState('');
   const remoteItems = state.remotePlanning?.shoppingList.items;
-  const remoteItems = state.remotePlanning?.shoppingList.items;
   const items = remoteItems ? remoteItems.map(item => ({ id: item.id, name: item.name, emoji: item.category.includes('Hortifruti') ? '🥦' : item.category.includes('Carnes') ? '🍗' : '🛒', category: item.category, unit: item.unit, quantity: item.quantityNeeded })) : shoppingList(state.plan, state.profile.people);
   const isChecked = (id: string) => remoteItems ? remoteItems.find(item => item.id === id)?.purchased ?? false : state.checked.includes(id);
   const categories = [...new Set(items.map(i => i.category))];
