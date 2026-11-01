@@ -4,7 +4,7 @@ export const API_BASE_URL = (
   env.EXPO_PUBLIC_API_BASE_URL ||
   env.NEXT_PUBLIC_API_BASE_URL ||
   "https://backend-compras-fit.vercel.app"
-).replace(/\\/+$/, "");
+).replace(/\/+$/, "");
 
 export const apiConfigured = Boolean(API_BASE_URL);
 

@@ -14,9 +14,10 @@ export function Home({ onRecipe, onShopping, onEdit }: { onRecipe: (id: string, 
   const greeting = hour >= 5 && hour < 12 ? 'BOM DIA' : hour >= 12 && hour < 18 ? 'BOA TARDE' : 'BOA NOITE';
   const c = useTheme();
   const { wide, columns } = useResponsive();
-  const total = planCost(state.plan, state.profile.people);
-  const list = shoppingList(state.plan, state.profile.people);
-  const checked = list.filter(item => state.checked.includes(item.id)).length;
+  const remoteItems = state.remotePlanning?.shoppingList.items;
+  const total = state.remotePlanning?.total ?? planCost(state.plan, state.profile.people);
+  const list = remoteItems ? remoteItems.map(item => ({ id: item.id })) : shoppingList(state.plan, state.profile.people);
+  const checked = remoteItems ? remoteItems.filter(item => item.purchased).length : list.filter(item => state.checked.includes(item.id)).length;
   const firstName = (state.profile.name || 'Chef').trim().split(' ')[0];
   const percent = state.profile.budget > 0 ? Math.min(100, Math.round(total / state.profile.budget * 100)) : 0;
   return <ScrollView style={{ backgroundColor: c.bg }} contentContainerStyle={{ paddingHorizontal: wide ? 36 : 22, paddingTop: 28, paddingBottom: 48, gap: 25 }}>
@@ -56,6 +57,6 @@ export function Home({ onRecipe, onShopping, onEdit }: { onRecipe: (id: string, 
       {!state.plan.length && <Card><Text style={{ color: c.muted }}>Nenhuma receita compatível. Ajuste suas preferências para montar um plano.</Text></Card>}
     </View>
     <Button title="Editar planejamento" secondary icon="options-outline" onPress={onEdit}/>
-    <Text style={{ textAlign: 'center', fontSize: 13, lineHeight: 17, color: c.muted }}>{total > state.profile.budget ? 'O custo estimado supera seu orçamento. Revise seu planejamento.' : 'Preços e valores nutricionais são estimativas ilustrativas.\n      {state.remotePlanning ? ' Planejamento sincronizado com o backend.' : ' Entre na sua conta para sincronizar seu planejamento.'}'}</Text>
+    <Text style={{ textAlign: 'center', fontSize: 13, lineHeight: 17, color: c.muted }}>{total > state.profile.budget ? 'O custo estimado supera seu orçamento. Revise seu planejamento.' : state.remotePlanning ? 'Planejamento sincronizado com o backend.' : 'Preços e valores nutricionais são estimativas ilustrativas. Entre na sua conta para sincronizar.'}</Text>
   </ScrollView>;
 }
