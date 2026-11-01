@@ -62,7 +62,7 @@ function Main() {
   return <SafeAreaView style={{ flex: 1, backgroundColor: c.bg }}>
     <StatusBar style={state.preferences.dark ? 'light' : 'dark'} />
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
-      {!!storageError && <Text accessibilityRole="alert" style={{ padding: 12, backgroundColor: '#FBE3CF', color: '#703D1E', fontSize: 14 }}>{storageError}</Text>}
+      {!!storageError && <Text accessibilityRole="alert" style={{ padding: 12, backgroundColor: '#FBE3CF', color: '#703D1E', fontSize: 14 }}>{storageError}</Text>}\n      {!!state.apiError && <Text accessibilityRole="alert" style={{ padding: 12, backgroundColor: '#FFF0D8', color: '#704D1E', fontSize: 14 }}>{state.apiError}</Text>}
       <View style={{ flex: 1, flexDirection: 'row' }}>
         {wide && loaded && state.completed && !showWelcome && screen.type !== 'edit' && <View style={{ width: 232, backgroundColor: c.white, borderRightWidth: 1, borderColor: c.border, padding: 22, gap: 30 }}>
           <View style={{ gap: 10, paddingVertical: 12 }}><Icon name="leaf" size={32} color={c.forest} /><Text style={{ color: c.forest, fontSize: 27, fontWeight: '800', letterSpacing: -1 }}>ComprasFit</Text><Text style={{ color: c.muted, fontSize: 14 }}>Sua semana mais leve.</Text></View>

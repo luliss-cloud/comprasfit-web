@@ -56,6 +56,6 @@ export function Home({ onRecipe, onShopping, onEdit }: { onRecipe: (id: string, 
       {!state.plan.length && <Card><Text style={{ color: c.muted }}>Nenhuma receita compatível. Ajuste suas preferências para montar um plano.</Text></Card>}
     </View>
     <Button title="Editar planejamento" secondary icon="options-outline" onPress={onEdit}/>
-    <Text style={{ textAlign: 'center', fontSize: 13, lineHeight: 17, color: c.muted }}>{total > state.profile.budget ? 'O custo estimado supera seu orçamento. Revise seu planejamento.' : 'Preços e valores nutricionais são estimativas ilustrativas.'}</Text>
+    <Text style={{ textAlign: 'center', fontSize: 13, lineHeight: 17, color: c.muted }}>{total > state.profile.budget ? 'O custo estimado supera seu orçamento. Revise seu planejamento.' : 'Preços e valores nutricionais são estimativas ilustrativas.\n      {state.remotePlanning ? ' Planejamento sincronizado com o backend.' : ' Entre na sua conta para sincronizar seu planejamento.'}'}</Text>
   </ScrollView>;
 }

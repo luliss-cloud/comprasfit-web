@@ -11,10 +11,12 @@ export function Shopping() {
   const c = useTheme();
   const { columns } = useResponsive();
   const [message, setMessage] = useState('');
-  const items = shoppingList(state.plan, state.profile.people);
+  const remoteItems = state.remotePlanning?.shoppingList.items;
+  const items = remoteItems ? remoteItems.map(item => ({ id: item.id, name: item.name, emoji: item.category.includes('Hortifruti') ? '🥦' : item.category.includes('Carnes') ? '🍗' : '🛒', category: item.category, unit: item.unit, quantity: item.quantityNeeded })) : shoppingList(state.plan, state.profile.people);
+  const isChecked = (id: string) => remoteItems ? remoteItems.find(item => item.id === id)?.purchased ?? false : state.checked.includes(id);
   const categories = [...new Set(items.map(i => i.category))];
-  const count = items.filter(i => state.checked.includes(i.id)).length;
-  const listText = () => `Minha lista ComprasFit\n${items.map(i => `${state.checked.includes(i.id) ? '✓' : '□'} ${i.name} — ${i.quantity.toLocaleString('pt-BR')} ${i.unit}`).join('\n')}`;
+  const count = items.filter(i => isChecked(i.id)).length;
+  const listText = () => `Minha lista ComprasFit\n${items.map(i => `${isChecked(i.id) ? '✓' : '□'} ${i.name} — ${i.quantity.toLocaleString('pt-BR')} ${i.unit}`).join('\n')}`;
   const share = async () => {
     try {
       setMessage(await shareList(listText()));
@@ -33,7 +35,7 @@ export function Shopping() {
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'flex-start', gap: 22 }}>{categories.map(category => <View key={category} style={{ gap: 10, width: columns > 1 ? '48%' : '100%' }}>
       <Text style={{ fontSize: 13, color: c.muted, textTransform: 'uppercase', letterSpacing: 1 }}>{category}</Text>
       <Card style={{ padding: 0, overflow: 'hidden' }}>{items.filter(i => i.category === category).map((item, index) => {
-        const checked = state.checked.includes(item.id);
+        const checked = isChecked(item.id);
         return <Pressable key={item.id} accessibilityRole="checkbox" accessibilityState={{ checked }} aria-checked={checked} accessibilityLabel={`${item.name}, ${item.quantity} ${item.unit}`} onPress={() => toggleChecked(item.id)} style={[ui.row, { padding: 16, borderTopWidth: index ? 1 : 0, borderColor: c.border }]}>
           <Text style={{ fontSize: 26 }}>{item.emoji}</Text>
           <View style={{ flex: 1, gap: 4 }}><Text style={{ color: checked ? c.muted : c.text, fontWeight: '600', textDecorationLine: checked ? 'line-through' : 'none' }}>{item.name}</Text><Text style={{ color: c.muted, fontSize: 14 }}>{item.quantity.toLocaleString('pt-BR')} {item.unit}</Text></View>
